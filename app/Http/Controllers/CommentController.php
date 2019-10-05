@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -34,7 +40,15 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'comment' => 'required',
+        ]);
+        $comment = new Comment();
+        $comment = $comment->fill($request->toArray());
+        $comment->user_id = Auth::id();
+        $comment->save();
+
+        return redirect()->back()->with('message','Operation Successful !');
     }
 
     /**

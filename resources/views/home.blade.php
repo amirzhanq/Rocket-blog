@@ -27,19 +27,24 @@
                         @foreach($posts as $post)
                                 <tbody id="myTable">
                                 <tr>
-                                    <td>{{ $loop->index }}</td>
+                                    <td>{{ $loop->index+1 }}</td>
                                     <td>{{ $post->title }}</td>
                                     <td>{{ $post->user->name }}</td>
                                     <td>{{ $post->created_at }}</td>
-                                    <td><a href=""><button class="btn btn-info">Read</button></a>
-                                    <a href="{{ url('/post/edit', $post->id) }}"><button class="btn btn-dark">Edit</button></a>
-                                    <a href=""><button class="btn btn-danger">Delete</button></a></td>
+                                    <td>
+                                        <a href="{{ url('/post/show', $post->id) }}"><button class="btn btn-info">Read</button></a>
+                                        <a href="{{ url('/post/edit', $post->id) }}"><button class="btn btn-dark">Edit</button></a>
 
+                                        <form method="post" action="{{ route('post.delete', $post->id) }}">
+                                            @csrf
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                        </form>
+                                    </td>
                                 </tr>
                                 </tbody>
                         @endforeach
                         </table>
-
+                        {{ $posts->links() }}
                 </div>
 
                 <script>

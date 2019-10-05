@@ -59,6 +59,9 @@
         </div>
     </div>
 
+        {{ $posts->links() }}
+
+
 {{--    <div class="starter-template">--}}
 {{--        <h1>Welcome to Rocket Blog</h1>--}}
 {{--        <p class="lead">You can choose what you are interested.<br> You may check your posts.</p>--}}

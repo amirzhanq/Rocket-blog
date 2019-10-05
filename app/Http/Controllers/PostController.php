@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Post;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +18,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::orderBy('created_at', 'DESC')->get();
+        $posts = Post::orderBy('created_at', 'DESC')->paginate(4);
         return view('welcome',[ 'posts' => $posts]);
     }
 
@@ -54,7 +57,8 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        //
+        $post = Post::find($id);
+        return  view('posts.show', ['post' => $post]);
     }
 
     /**
@@ -91,7 +95,20 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = Post::find($id);
+        $post->comments()->delete();
+        $post->delete();
+
+        return redirect()->back();
+    }
+
+    public function authors() {
+        $users = User::all();
+        return view('authors', ['users' => $users]);
+    }
+    public function showAuthorPosts($id) {
+        $posts = Post::where('user_id', $id)->get();
+        return view('showauthorposts',['posts' => $posts ]);
     }
 
 }
